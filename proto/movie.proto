@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package="./pb";
+
+service MovieSvc {
+    rpc PutMovie(PutMovieRequest) returns (PutMovieResponse);
+    rpc GetMovie(GetMovieRequest) returns (GetMovieResponse);
+    rpc GetMovies(GetMoviesRequest) returns (GetMoviesResponse);
+    rpc DeleteMovie(DeleteMovieRequest) returns (DeleteMovieResponse);
+}
+
+message Movie {
+    string tconst = 1;
+    string name = 2;
+    int64 release_date = 3;
+    string country = 4;
+    int32 runtime = 5;
+    MPARating mpa_rating = 6;
+}
+
+enum MPARating {
+    G = 0;
+    PG = 1;
+    PG13 = 2;
+    R = 3;
+    NC17 = 4;
+}
+
+message PutMovieRequest {
+    Movie movie = 1;
+}
+
+message PutMovieResponse {
+    int32 status_code = 1;
+    string message = 2;
+}
+
+message GetMovieRequest {
+    string tconst = 1;
+}
+
+message GetMovieResponse {
+    int32 status_code = 1;
+    string message = 2;
+    Movie movie = 3;
+}
+
+message GetMoviesRequest {
+    string query_name = 1;
+}
+
+message GetMoviesResponse {
+    int32 status_code = 1;
+    string message = 2;
+    repeated Movie movies = 3;
+}
+
+message DeleteMovieRequest {
+    string tconst = 1;
+}
+
+message DeleteMovieResponse {
+    int32 status_code = 1;
+    string message = 2;
+}
