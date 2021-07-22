@@ -1,3 +1,12 @@
+# Dev tools
+.idea
+
+# .env file
+.env
+
+# Logging
+*.txt
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
