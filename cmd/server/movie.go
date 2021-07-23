@@ -33,7 +33,7 @@ func (ms *MovieSvc) RunGRPC(c context.Context) error {
 		server.GracefulStop()
 		<-ctx.Done()
 	}()
-	logger.Info("starting down gRPC server...")
+	logger.Info(fmt.Sprintf("starting down gRPC server, port %s...", config.port))
 	return server.Serve(ltn)
 }
 
