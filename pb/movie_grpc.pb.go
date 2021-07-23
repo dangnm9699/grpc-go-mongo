@@ -205,5 +205,5 @@ var MovieSvc_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "grpcapi.proto",
+	Metadata: "movie.proto",
 }

@@ -17,15 +17,7 @@ message Movie {
     int64 release_date = 3;
     string country = 4;
     int32 runtime = 5;
-    MPARating mpa_rating = 6;
-}
-
-enum MPARating {
-    G = 0;
-    PG = 1;
-    PG13 = 2;
-    R = 3;
-    NC17 = 4;
+    string mpa_rating = 6;
 }
 
 message PutMovieRequest {
