@@ -4,16 +4,15 @@ Create a gRPC example using Go, MongoDB
 
 * _Make sure your mongodb running_
 
-* Create ```.env```:
-    ```shell
-    cp .env.example .env
-    ```
-* Edit your ```.env```
+* Download/Clean dependencies:
+  ```shell
+  go mod tidy
+  ```
 * Run server:
     ```shell
-    go run github.com/dangnm9699/grpc-example/cmd/server
+    go run main.go server
     ```
 * Run client:
     ```shell
-    go run github.com/dangnm9699/grpc-example/cmd/client
+    go run main.go client
     ```
