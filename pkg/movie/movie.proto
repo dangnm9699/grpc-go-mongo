@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package pb;
 
-option go_package="./pb";
+option go_package=".";
 
 service MovieSvc {
     rpc PutMovie(PutMovieRequest) returns (PutMovieResponse);
@@ -14,7 +14,7 @@ service MovieSvc {
 message Movie {
     string tconst = 1;
     string name = 2;
-    int64 release_date = 3;
+    string release_date = 3;
     string country = 4;
     int32 runtime = 5;
     string mpa_rating = 6;
