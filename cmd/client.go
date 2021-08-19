@@ -18,8 +18,8 @@ package cmd
 
 import (
 	"context"
-	"github.com/dangnm9699/grpc-example/logger"
-	pb "github.com/dangnm9699/grpc-example/pkg/movie"
+	"github.com/dangnm9699/grpc-go-mongo/logger"
+	pb "github.com/dangnm9699/grpc-go-mongo/pkg/movie"
 	"google.golang.org/grpc"
 	"time"
 
@@ -55,11 +55,13 @@ var clientCmd = &cobra.Command{
 				Runtime:     149,
 				MpaRating:   "PG-13",
 			},
+			//Movie: &pb.Movie{},
 		})
+		//r, err := client.DeleteMovie(c, &pb.DeleteMovieRequest{Tconst: "tt4154756"})
 		if err != nil {
-			logger.Error().Fatalf("error occurred: %v", err)
+			logger.Error().Fatalf("%v\n", err)
 		}
-		logger.Debug().Printf("code=%d, message=%s\n", r.StatusCode, r.Message)
+		logger.Debug().Println(r.Message)
 	},
 }
 

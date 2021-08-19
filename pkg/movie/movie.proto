@@ -25,8 +25,7 @@ message PutMovieRequest {
 }
 
 message PutMovieResponse {
-    int32 status_code = 1;
-    string message = 2;
+    string message = 1;
 }
 
 message GetMovieRequest {
@@ -34,9 +33,7 @@ message GetMovieRequest {
 }
 
 message GetMovieResponse {
-    int32 status_code = 1;
-    string message = 2;
-    Movie movie = 3;
+    Movie movie = 1;
 }
 
 message GetMoviesRequest {
@@ -44,9 +41,8 @@ message GetMoviesRequest {
 }
 
 message GetMoviesResponse {
-    int32 status_code = 1;
-    string message = 2;
-    repeated Movie movies = 3;
+    string message = 1;
+    repeated Movie movies = 2;
 }
 
 message DeleteMovieRequest {
@@ -54,6 +50,5 @@ message DeleteMovieRequest {
 }
 
 message DeleteMovieResponse {
-    int32 status_code = 1;
-    string message = 2;
+    string message = 1;
 }

@@ -1,4 +1,4 @@
-module github.com/dangnm9699/grpc-example
+module github.com/dangnm9699/grpc-go-mongo
 
 go 1.17
 

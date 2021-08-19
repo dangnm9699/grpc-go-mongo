@@ -19,8 +19,8 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"github.com/dangnm9699/grpc-example/logger"
-	pb "github.com/dangnm9699/grpc-example/pkg/movie"
+	"github.com/dangnm9699/grpc-go-mongo/logger"
+	pb "github.com/dangnm9699/grpc-go-mongo/pkg/movie"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -81,58 +81,60 @@ func init() {
 }
 
 func (svr *Server) PutMovie(ctx context.Context, req *pb.PutMovieRequest) (*pb.PutMovieResponse, error) {
-	mov := req.GetMovie()
-	_, err := mongoColl.ReplaceOne(
+	var movie *pb.Movie
+	movie = req.GetMovie()
+	if len(movie.Tconst) == 0 || len(movie.Name) == 0 {
+		logger.Debug().Printf("put movie failed: null values\n")
+		return nil, fmt.Errorf("null values")
+	}
+	ur, err := mongoColl.ReplaceOne(
 		ctx,
-		bson.M{"tconst": mov.Tconst},
-		mov,
+		bson.M{"tconst": movie.Tconst},
+		movie,
 		&options.ReplaceOptions{
 			Upsert: &mongoUpsert,
 		},
 	)
 	if err != nil {
-		logger.Error().Printf("put movie{tconst=%s} failed: %v\n", mov.Tconst, err)
-		return &pb.PutMovieResponse{
-			StatusCode: 500,
-			Message:    "internal server error",
-		}, err
+		logger.Error().Printf("put movie{tconst=%s} failed: %v\n", movie.Tconst, err)
+		return nil, fmt.Errorf("put movie{tconst=%s}: database failed", movie.Tconst)
 	}
-	logger.Debug().Printf("put movie{tconst=%s} successfully\n", mov.Tconst)
-	return &pb.PutMovieResponse{
-		StatusCode: 200,
-		Message:    "ok",
-	}, nil
+	logger.Debug().Printf("put movie{tconst=%s} successfully\n", movie.Tconst)
+	if ur.UpsertedCount == 0 {
+		return &pb.PutMovieResponse{
+			Message: fmt.Sprintf("put movie{tconst=%s}: updated", movie.Tconst),
+		}, nil
+	} else {
+		return &pb.PutMovieResponse{
+			Message: fmt.Sprintf("put movie{tconst=%s}: created", movie.Tconst),
+		}, nil
+	}
+
 }
 
 func (svr *Server) GetMovie(ctx context.Context, req *pb.GetMovieRequest) (*pb.GetMovieResponse, error) {
 	tconst := req.GetTconst()
+	if len(tconst) == 0 {
+		logger.Error().Printf("get movie failed: null values\n")
+		return nil, fmt.Errorf("null values")
+	}
 	sr := mongoColl.FindOne(
 		ctx,
 		bson.M{"tconst": tconst},
 	)
 	if sr.Err() == mongo.ErrNoDocuments {
 		logger.Error().Printf("get movie{tconst=%s} failed: %v\n", tconst, sr.Err())
-		return &pb.GetMovieResponse{
-			StatusCode: 404,
-			Message:    "not found",
-			Movie:      nil,
-		}, fmt.Errorf("movie not found")
+		return nil, fmt.Errorf("get movie{tconst=%s}: not found", tconst)
 	}
-	var mov *pb.Movie
-	err := sr.Decode(mov)
+	var movie *pb.Movie
+	err := sr.Decode(movie)
 	if err != nil {
 		logger.Error().Printf("get movie{tconst=%s} failed: %v\n", tconst, err)
-		return &pb.GetMovieResponse{
-			StatusCode: 500,
-			Message:    "internal server error",
-			Movie:      nil,
-		}, err
+		return nil, fmt.Errorf("get movie{tconst=%s}: decode failed", tconst)
 	}
 	logger.Debug().Printf("get movie{tconst=%s} successfully\n", tconst)
 	return &pb.GetMovieResponse{
-		StatusCode: 200,
-		Message:    "ok",
-		Movie:      mov,
+		Movie: movie,
 	}, nil
 }
 
@@ -143,11 +145,7 @@ func (svr *Server) GetMovies(ctx context.Context, _ *pb.GetMoviesRequest) (*pb.G
 	)
 	if err != nil {
 		logger.Error().Printf("get movies failed: %v\n", err)
-		return &pb.GetMoviesResponse{
-			StatusCode: 500,
-			Message:    "internal server error",
-			Movies:     nil,
-		}, err
+		return nil, fmt.Errorf("get movies: database failed")
 	}
 	var movies []*pb.Movie
 	for cur.Next(ctx) {
@@ -156,45 +154,37 @@ func (svr *Server) GetMovies(ctx context.Context, _ *pb.GetMoviesRequest) (*pb.G
 		if err != nil {
 			logger.Error().Printf("get movies failed: %v\n", err)
 			movies = nil
-			return &pb.GetMoviesResponse{
-				StatusCode: 500,
-				Message:    "internal server error",
-				Movies:     nil,
-			}, err
+			return nil, fmt.Errorf("get movies: retrieve database failed")
 		}
 		movies = append(movies, movie)
 	}
 	logger.Debug().Printf("get movies successfully\n")
 	return &pb.GetMoviesResponse{
-		StatusCode: 200,
-		Message:    "ok",
-		Movies:     movies,
+		Message: "get movies: ok",
+		Movies:  movies,
 	}, nil
 }
 
 func (svr *Server) DeleteMovie(ctx context.Context, req *pb.DeleteMovieRequest) (*pb.DeleteMovieResponse, error) {
 	tconst := req.GetTconst()
+	if len(tconst) == 0 {
+		logger.Error().Printf("delete movie failed: null values\n")
+		return nil, fmt.Errorf("null values")
+	}
 	dr, err := mongoColl.DeleteOne(
 		ctx,
 		bson.M{"tconst": tconst},
 	)
 	if err != nil {
 		logger.Error().Printf("delete movie{tconst=%s} failed: %v\n", tconst, err)
-		return &pb.DeleteMovieResponse{
-			StatusCode: 500,
-			Message:    "internal server error",
-		}, err
+		return nil, fmt.Errorf("delete movie{tconst=%s}: database failed", tconst)
 	}
 	if dr.DeletedCount == 0 {
 		logger.Debug().Printf("delete movie{tconst=%s} failed: not available\n", tconst)
-		return &pb.DeleteMovieResponse{
-			StatusCode: 404,
-			Message:    "not found",
-		}, fmt.Errorf("movie not found")
+		return nil, fmt.Errorf("delete movie{tconst=%s}: not found", tconst)
 	}
 	logger.Debug().Printf("delete movie{tconst=%s} successfully\n", tconst)
 	return &pb.DeleteMovieResponse{
-		StatusCode: 200,
-		Message:    "ok",
+		Message: fmt.Sprintf("delete movie{tconst=%s}: ok", tconst),
 	}, nil
 }

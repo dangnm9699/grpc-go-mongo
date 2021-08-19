@@ -1,18 +1,18 @@
 # grpc-example
 
-Create a gRPC example using Go, MongoDB
+Create a gRPC example in Go using MongoDB as storage
 
 * _Make sure your mongodb running_
-
+ 
 * Download/Clean dependencies:
-  ```shell
-  go mod tidy
-  ```
+    ```shell
+    go mod tidy
+    ```
 * Run server:
     ```shell
-    go run main.go server
+    ./bin/grpc-go-mongo.exe server
     ```
 * Run client:
     ```shell
-    go run main.go client
+    ./bin/grpc-go-mongo.exe client
     ```

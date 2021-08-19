@@ -16,8 +16,8 @@ limitations under the License.
 package main
 
 import (
-	"github.com/dangnm9699/grpc-example/cmd"
-	"github.com/dangnm9699/grpc-example/logger"
+	"github.com/dangnm9699/grpc-go-mongo/cmd"
+	"github.com/dangnm9699/grpc-go-mongo/logger"
 )
 
 func main() {
