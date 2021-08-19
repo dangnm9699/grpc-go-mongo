@@ -1,11 +1,6 @@
 # Dev tools
 .idea
-
-# .env file
-.env
-
-# Logging
-*.txt
+.vscode
 
 # Binaries for programs and plugins
 *.exe
