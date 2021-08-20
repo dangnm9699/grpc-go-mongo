@@ -30,7 +30,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "grpc-go-mongo",
 	Short: "gRPC example",
-	Long: `gRPC example in Go using MongoDB as storage`,
+	Long:  `gRPC example in Go using MongoDB as storage`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },

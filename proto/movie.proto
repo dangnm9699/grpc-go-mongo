@@ -2,53 +2,53 @@ syntax = "proto3";
 
 package movie;
 
-option go_package="./movie";
+option go_package = "./movie";
 
 service MovieSvc {
-    rpc PutMovie(PutMovieRequest) returns (PutMovieResponse);
-    rpc GetMovie(GetMovieRequest) returns (GetMovieResponse);
-    rpc GetMovies(GetMoviesRequest) returns (GetMoviesResponse);
-    rpc DeleteMovie(DeleteMovieRequest) returns (DeleteMovieResponse);
+  rpc PutMovie(PutMovieRequest) returns (PutMovieResponse);
+  rpc GetMovie(GetMovieRequest) returns (GetMovieResponse);
+  rpc GetMovies(GetMoviesRequest) returns (GetMoviesResponse);
+  rpc DeleteMovie(DeleteMovieRequest) returns (DeleteMovieResponse);
 }
 
 message Movie {
-    string tconst = 1;
-    string name = 2;
-    string release_date = 3;
-    string country = 4;
-    int32 runtime = 5;
-    string mpa_rating = 6;
+  string tconst = 1;
+  string name = 2;
+  string release_date = 3;
+  string country = 4;
+  int32 runtime = 5;
+  string mpa_rating = 6;
 }
 
 message PutMovieRequest {
-    Movie movie = 1;
+  Movie movie = 1;
 }
 
 message PutMovieResponse {
-    string message = 1;
+  string message = 1;
 }
 
 message GetMovieRequest {
-    string tconst = 1;
+  string tconst = 1;
 }
 
 message GetMovieResponse {
-    Movie movie = 1;
+  Movie movie = 1;
 }
 
 message GetMoviesRequest {
-    string query_name = 1;
+  string query_name = 1;
 }
 
 message GetMoviesResponse {
-    string message = 1;
-    repeated Movie movies = 2;
+  string message = 1;
+  repeated Movie movies = 2;
 }
 
 message DeleteMovieRequest {
-    string tconst = 1;
+  string tconst = 1;
 }
 
 message DeleteMovieResponse {
-    string message = 1;
+  string message = 1;
 }

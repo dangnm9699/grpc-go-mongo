@@ -5,7 +5,7 @@
 Create a gRPC example in Go using MongoDB as storage
 
 * _Make sure your mongodb running_
- 
+
 * Download/Clean dependencies:
     ```shell
     go mod tidy
