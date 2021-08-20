@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package pb;
+package movie;
 
-option go_package=".";
+option go_package="./movie";
 
 service MovieSvc {
     rpc PutMovie(PutMovieRequest) returns (PutMovieResponse);
