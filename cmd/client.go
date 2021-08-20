@@ -1,4 +1,4 @@
-// Package cmd
+// Package cmd includes CLI commands
 /*
 Copyright © 2021 NAME HERE <EMAIL ADDRESS>
 
@@ -27,8 +27,10 @@ import (
 )
 
 const (
+	// ServerAddress represents gRPC server address
 	ServerAddress = "localhost:5000"
 
+	// ClientTimeout represents timeout duration
 	ClientTimeout = 1 * time.Second
 )
 

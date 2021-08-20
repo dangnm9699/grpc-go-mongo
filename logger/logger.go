@@ -15,16 +15,20 @@ func init() {
 	errorLogger = log.New(os.Stderr, "[ERROR] ", log.Ldate|log.Ltime|log.Lshortfile)
 }
 
+// Set used to initialize all logger
 func Set() {}
 
+// Info used to get info logger
 func Info() *log.Logger {
 	return infoLogger
 }
 
+// Debug used to get info logger
 func Debug() *log.Logger {
 	return debugLogger
 }
 
+// Error used to get info logger
 func Error() *log.Logger {
 	return errorLogger
 }

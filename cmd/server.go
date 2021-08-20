@@ -1,4 +1,4 @@
-// Package cmd
+// Package cmd includes CLI commands
 /*
 Copyright © 2021 NAME HERE <EMAIL ADDRESS>
 
@@ -31,17 +31,23 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Server implements movie service server
 type Server struct {
 	pb.UnimplementedMovieSvcServer
 }
 
 const (
+	// ServerPort is gRPC server port
 	ServerPort = ":5000"
 
-	MongoUri        = "mongodb://localhost:27017"
-	MongoDatabase   = "grpc"
+	// MongoUri are used to connect to MongoDB
+	MongoUri = "mongodb://localhost:27017"
+	// MongoDatabase specifies database to connect
+	MongoDatabase = "grpc"
+	// MongoCollection specifies collection to connect
 	MongoCollection = "example"
-	MongoTimeout    = 10 * time.Second
+	// MongoTimeout represents Mongo timeout duration
+	MongoTimeout = 10 * time.Second
 )
 
 var mongoColl *mongo.Collection
@@ -80,6 +86,7 @@ func init() {
 	rootCmd.AddCommand(serverCmd)
 }
 
+// PutMovie method create a movie or update a existed movie
 func (svr *Server) PutMovie(ctx context.Context, req *pb.PutMovieRequest) (*pb.PutMovieResponse, error) {
 	var movie *pb.Movie
 	movie = req.GetMovie()
@@ -104,14 +111,13 @@ func (svr *Server) PutMovie(ctx context.Context, req *pb.PutMovieRequest) (*pb.P
 		return &pb.PutMovieResponse{
 			Message: fmt.Sprintf("put movie{tconst=%s}: updated", movie.Tconst),
 		}, nil
-	} else {
-		return &pb.PutMovieResponse{
-			Message: fmt.Sprintf("put movie{tconst=%s}: created", movie.Tconst),
-		}, nil
 	}
-
+	return &pb.PutMovieResponse{
+		Message: fmt.Sprintf("put movie{tconst=%s}: created", movie.Tconst),
+	}, nil
 }
 
+// GetMovie method retrieve a specified movie if exists
 func (svr *Server) GetMovie(ctx context.Context, req *pb.GetMovieRequest) (*pb.GetMovieResponse, error) {
 	tconst := req.GetTconst()
 	if len(tconst) == 0 {
@@ -138,6 +144,7 @@ func (svr *Server) GetMovie(ctx context.Context, req *pb.GetMovieRequest) (*pb.G
 	}, nil
 }
 
+// GetMovies method retrieve all movies
 func (svr *Server) GetMovies(ctx context.Context, _ *pb.GetMoviesRequest) (*pb.GetMoviesResponse, error) {
 	cur, err := mongoColl.Find(
 		ctx,
@@ -165,6 +172,7 @@ func (svr *Server) GetMovies(ctx context.Context, _ *pb.GetMoviesRequest) (*pb.G
 	}, nil
 }
 
+// DeleteMovie method delete a specified movie if exists
 func (svr *Server) DeleteMovie(ctx context.Context, req *pb.DeleteMovieRequest) (*pb.DeleteMovieResponse, error) {
 	tconst := req.GetTconst()
 	if len(tconst) == 0 {

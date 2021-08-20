@@ -1,3 +1,4 @@
+// Package cmd includes CLI commands
 /*
 Copyright © 2021 NAME HERE <EMAIL ADDRESS>
 
